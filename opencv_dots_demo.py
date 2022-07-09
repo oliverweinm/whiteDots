@@ -1,5 +1,7 @@
 import cv2
+import numpy
 from os import listdir
+from matplotlib import pyplot as plt
 
 """
 -----------------------------------------------
@@ -58,3 +60,27 @@ cv2.imwrite(f"{dirImagesList[0]}-cleaned.png", img_3gray)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+cleaned_img_gray = cv2.imread(f"{dirImagesList[0]}-cleaned.png", cv2.IMREAD_GRAYSCALE)
+"""
+GLOBAL THRESHOLDING EXPERIMENT -> DOENS'T WORK
+cleaned_img_gray = cv2.cvtColor(cleaned_img_gray, cv2.COLOR_BGR2GRAY)
+print(cleaned_img_gray)
+ret, mask = cv2.threshold(cleaned_img_gray, 54000, 65535, cv2.THRESH_)
+cv2.imshow("Binary image", mask)
+cv2.waitKey(0)
+"""
+
+cleaned_img = cv2.medianBlur(cleaned_img_gray,5)
+ret,th1 = cv2.threshold(cleaned_img,127,256,cv2.THRESH_BINARY)
+th2 = cv2.adaptiveThreshold(cleaned_img,256,cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY,11,2)
+th3 = cv2.adaptiveThreshold(cleaned_img,256,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
+titles = ['Original Image', 'Global Thresholding (v = 127)',
+            'Adaptive Mean Thresholding', 'Adaptive Gaussian Thresholding']
+images = [cleaned_img, th1, th2, th3]
+for i in range(4):
+    plt.subplot(2,2,i+1),plt.imshow(images[i],'gray')
+    plt.title(titles[i])
+    plt.xticks([]),plt.yticks([])
+plt.show()
+
