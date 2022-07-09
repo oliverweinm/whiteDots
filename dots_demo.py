@@ -69,7 +69,7 @@ for x in range(0,50):
 
 for x in range(0, 1080):
 	for y in range(0, 1080):
-		if imageArray[x,y] < 4250: #This an extreme mask that tries to cut out everything except for the test plate. 300-400 is the value where significant areas of background start to get masked:
+		if imageArray[x,y] < 4500: #This an extreme mask that tries to cut out everything except for the test plate. 300-400 is the value where significant areas of background start to get masked:
 			imageArray[x,y] = 180000
 
 im = Image.fromarray(imageArray)
